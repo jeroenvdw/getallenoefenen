@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="nl">
+    <head>
+        <title>Oefenen nummers VGT</title>
+        <!-- Latest compiled and minified CSS for Bootstrap -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+        </head>
+        <script>
+
+var intervalFtn = null;
+var interval = 5000;
+
+startExercise = function() {
+    interval = parseInt(document.getElementById("interval").value )* 1000;
+    if(intervalFtn != null) {
+        window.clearInterval(intervalFtn);
+    }
+    exercise =  document.getElementById("exercise").value;
+    if(exercise == 'number') {
+        doExercise(generateNumber);
+    } 
+    else if(exercise == 'calculation') {
+        doExercise(generateCalculation);
+    }
+    else if(exercise == 'date') {
+        doExercise(generateDate);
+    }
+    else if(exercise == 'telephone') {
+        doExercise(generateTelephone);
+    }
+}
+
+fmtNr = function(n,digits) {
+    return n.toLocaleString('nl-BE', {minimumFractionDigits: 0, minimumIntegerDigits: digits});
+}
+
+doExercise = function(exerciseFtn) {
+    exerciseFtn();
+    intervalFtn = window.setInterval(exerciseFtn,interval);
+}
+
+generateNumber = function() {
+    min = parseInt(document.getElementById("minimum").value) ;
+    max = parseInt(document.getElementById("maximum").value);
+    r = Math.floor(Math.random() * (max-min)) + min ;
+    rp = document.getElementById("rand");
+    rp.innerHTML = fmtNr(r,1);
+}
+
+generateCalculation = function() {
+    min = parseInt(document.getElementById("minimum").value) ;
+    max = parseInt(document.getElementById("maximum").value);
+    r1 = Math.floor(Math.random() * (max-min)) + min ;
+    r2 = Math.floor(Math.random() * (max-min)) + min ;
+    sign = " ";
+    calc = Math.floor(Math.random() * 4) ;
+    if(calc == 0) {
+        // "+" 
+        r1 = Math.floor(r1/10.0);
+        r2 = Math.floor(r2/10.0);
+        r3 = r1 + r2;
+        sign = " + ";
+    }
+    else if(calc == 1) {
+        // "-" 
+        r1 = Math.floor(r1/10.0);
+        r2 = Math.floor(r2/10.0);
+        r1 = r1+r2;
+        r3 = r1-r2;
+        sign = " - ";
+    }
+    else if (calc == 2) {
+        // "*" 
+        r1 = Math.floor(Math.sqrt(r1));
+        r2 = Math.floor(Math.sqrt(r2));
+        r3 = r1*r2;
+        sign = " * ";
+    }
+    else if(calc == 3) {
+        // "/" 
+        r1 = Math.floor(Math.sqrt(r1));
+        r2 = Math.floor(Math.sqrt(r2));
+        r1 = r1*r2;
+        r3 = r1/r2;
+        sign = " / "
+    }
+    rp = document.getElementById("rand");
+    rp.innerHTML = fmtNr(r1,1) + sign + fmtNr(r2,1) + " = " + fmtNr(r3,1);
+}
+
+months = ['januari','februari','maart','april','mei','juni','juli','augustus','september','oktober','november','december'];
+daysOfWeek = ['maandag','dinsdag','woensdag','donderdag','vrijdag','zaterdag','zondag']
+
+generateDate = function() {
+    dow = Math.floor(Math.random() * 7) ;
+    d = Math.floor(Math.random() * 30) + 1 ;
+    m = Math.floor(Math.random() * 12) ;
+    y = Math.floor(Math.random() * 1050) + 1000 ;
+    rp = document.getElementById("rand");
+    rp.innerHTML = daysOfWeek[dow] + ' ' + d + ' ' + months[m] + ' ' + y;
+}
+
+generateTelephone = function() {
+    r1 = Math.floor(Math.random() * 100);
+    r2 = Math.floor(Math.random() * 100);
+    r3 = Math.floor(Math.random() * 100);
+    r4 = Math.floor(Math.random() * 100);
+    rp = document.getElementById("rand");
+    rp.innerHTML = "04" + fmtNr(r1,2) + "/" + fmtNr(r2,2) + "." + fmtNr(r3,2) + "." + fmtNr(r4,2);
+}
+
+        </script>
+        <body>
+            <div class="container">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="interval">Interval: </label>
+                        <input id="interval" class="form-control" value="5" type="number" size="3" min="1" max="20"/> 
+                    </div>
+                    <div class="form-group">
+                        <label for="minimum">Minimum: </label>
+                        <input  class="form-control"  id="minimum" value="10000" type="number" size="9" min="1" max="9999999" />
+
+                        <label for="maximum">Maximum: </label>
+                        <input class="form-control"  id="maximum" value="99999" type="number" size="9" min="1" max="9999999" />
+                    </div>
+                    <div class="form-group">
+                        <label for="exercise">Oefening: </label>
+                        <select class="form-control"  id="exercise">
+                            <option value="number">Getal</option>
+                            <option value="calculation">Berekening</option>
+                            <option value="date">Datum</option>
+                            <option value="telephone">Telefoonnummer</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <a href="#" onClick="startExercise();" class="btn btn-primary" role="button">Start!</a>
+                    </div>
+                </form>
+                <center>
+                <div class="well well-lg">
+                    <h1 id="rand">Klik op Start!</h1>
+                </div>
+                </center>
+            </div>
+
+        </body>
+    </html>
